@@ -1,23 +1,18 @@
 package io.openmessaging.tester;
 
-import io.openmessaging.BytesMessage;
-import io.openmessaging.KeyValue;
-import io.openmessaging.Message;
-import io.openmessaging.MessageHeader;
-import io.openmessaging.Producer;
-import io.openmessaging.PullConsumer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.openmessaging.BytesMessage;
+import io.openmessaging.KeyValue;
+import io.openmessaging.MessageHeader;
+import io.openmessaging.PullConsumer;
 
 public class ConsumerTester {
 
@@ -126,5 +121,6 @@ public class ConsumerTester {
         }
         long end = System.currentTimeMillis();
         logger.info("Consumer Finished, Cost {} ms, Num {}", end - start, pullNum);
+        logger.info("Consumer Finished, Cost {} 条/ms,", pullNum/(end - start));
     }
 }

@@ -3,6 +3,8 @@ package io.openmessaging.tester;
 import io.openmessaging.KeyValue;
 import io.openmessaging.Message;
 import io.openmessaging.Producer;
+import io.openmessaging.tester.ConsumerTester.ConsumerTask;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -63,7 +65,13 @@ public class ProducerTester {
                     Message message = producer.createBytesMessageToQueue(queueOrTopic, (label + "_" + offsets.get(queueOrTopic)).getBytes());
                     logger.debug("queueOrTopic:{} offset:{}", queueOrTopic, label + "_" + offsets.get(queueOrTopic));
                     offsets.put(queueOrTopic, offsets.get(queueOrTopic) + 1);
+//                    message.properties().put("hehe1", "12345678901234567890");
+//                    message.properties().put("hehe2", "12345678901234567890");
+//                    message.properties().put("hehe3", "12345678901234567890");
+//                    message.properties().put("hehe4", "12345678901234567890");
                     producer.send(message);
+                   
+                   
                     sendNum++;
                     if (sendNum >= Constants.PRO_MAX) {
                         break;
@@ -73,6 +81,7 @@ public class ProducerTester {
                     break;
                 }
             }
+            producer.flush();
         }
 
     }
@@ -89,7 +98,13 @@ public class ProducerTester {
         for (int i = 0; i < ts.length; i++) {
             ts[i].join();
         }
+        int totalSendNum = 0;
+        for (int i = 0; i < ts.length; i++) {
+        	totalSendNum += ((ProducerTask)ts[i]).sendNum;
+        }
+        
         long end = System.currentTimeMillis();
-        logger.info("Produce Finished, Cost {} ms", end - start);
+        logger.info("Produce Finished, Cost {} ms",  (end - start));
+        logger.info("Produce Finished, Cost {} 条/ms",  totalSendNum/(end - start));
     }
 }
